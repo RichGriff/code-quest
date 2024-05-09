@@ -1,14 +1,44 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { UserButton, useUser } from "@clerk/nextjs";
+import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { Library, SquareDashedBottomCode } from "lucide-react";
 // import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import LoggedInUser from "./LoggedInUser";
+import { client } from "@/sanity/lib/client";
+import { useEffect, useState } from "react";
 
 
 const Navbar = () => {
   const { isLoaded, isSignedIn, user } = useUser();
+  const [category, setCategory] = useState<string>('')
+
+  async function getData() {
+    // Get today's date in ISO 8601 format
+    const today = new Date().toISOString().split('T')[0];
+
+    // Construct the GROQ query
+    const query = `*[_type == "categories" && $today >= startDate && $today < endDate]{
+        _id,
+        category,
+        startDate,
+        endDate
+    }`;
+
+    // Define the parameters for the query
+    const params = { today };
+
+    // Execute the query
+    const data = await client.fetch(query, params);
+
+    return data[0].category;
+  }
+
+  useEffect(() => {
+    getData().then((category) => setCategory(category))
+  },[])
 
   return (
     <div className="pt-5 w-full">
@@ -27,14 +57,12 @@ const Navbar = () => {
 
         <div className="w-1/3 flex justify-center items-center">
           <span className="bg-indigo-500 px-5 py-1 rounded-md text-white">
-            Today's Category: Javascript
+            Today's Category: {category}
           </span>
         </div>
 
         <div className="w-1/3 flex items-center gap-3 justify-end px-16">
-          <Link href={'/studio'} className="h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground "><Library className="w-4 h-4 mr-2"/>Studio</Link>
-          <UserButton />
-            {user?.firstName}
+          <LoggedInUser />
         </div>
       </div>
     </div>

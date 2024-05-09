@@ -10,6 +10,11 @@ export default {
       type: "string"
     },
     {
+      name: 'description',
+      title: 'Description',
+      type: 'text'
+    },
+    {
       name: 'answers',
       title: "Answers",
       type: 'array',
@@ -19,6 +24,12 @@ export default {
       name: "correctAnswer",
       title: "Correct Answer",
       type: "string"
+    },
+    {
+      title: 'Category',
+      name: 'cateogry',
+      type: 'reference',
+      to: [{type: 'categories'}]
     }
   ]
 }
