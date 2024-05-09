@@ -2,7 +2,7 @@
 "use client";
 
 import { UserButton, useUser } from "@clerk/nextjs";
-import { SquareDashedBottomCode } from "lucide-react";
+import { Library, SquareDashedBottomCode } from "lucide-react";
 // import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -32,7 +32,7 @@ const Navbar = () => {
         </div>
 
         <div className="w-1/3 flex items-center gap-3 justify-end px-16">
-          {/* <UserMenu />*/}
+          <Link href={'/studio'} className="h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground "><Library className="w-4 h-4 mr-2"/>Studio</Link>
           <UserButton />
             {user?.firstName}
         </div>
