@@ -13,6 +13,7 @@ const Hero = () => {
   const [completedCategory, setCompletedCategory] = useState(false)
   // const { _id, category } = await getCategory()
   const { user } = useUser()
+  console.log('Current User Id:', user?.id)
 
   // const completedCategory = user ? await checkCategoryCompletion(user?.id, _id) : false
 

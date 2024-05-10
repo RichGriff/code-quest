@@ -39,11 +39,15 @@ export async function getQuestions(categoryId: string) {
 }
 
 export async function checkCategoryCompletion(userId: any, categoryId: string) {
-  console.log('Fetch Prisma data')
+  if(!userId) return false
+  
   try {
     const user = await prisma.user.findFirst({
       where: { clerkUserId: userId },
     })
+
+    console.log('Found User', user)
+
   
     const completedCategory = await prisma.categoryCompleted.findFirst({
       where: {
