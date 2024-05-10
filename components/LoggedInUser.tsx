@@ -30,20 +30,20 @@ const LoggedInUser = () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem>
               <Crown className="mr-2 h-4 w-4" />
-              <Link href={'/leaders'}>Leaderboard</Link>
+              <Link href={'/leaderboard'}>Leaderboard</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
               <BarChart2 className="mr-2 h-4 w-4" />
-              <Link href={'/studio'}>My Results</Link>
+              <Link href={'/stats'}>My Results</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <Link href={'/studio'}>Admin</Link>
-          </DropdownMenuItem>
+              <Link href={'/admin'}>Admin</Link>
+          </DropdownMenuItem> */}
           <DropdownMenuItem>
               <Library className="mr-2 h-4 w-4" />
-              <Link href={'/studio'}>Studio</Link>
+              <Link href={'/studio'} target='_blank'>Studio</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem >

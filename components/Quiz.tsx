@@ -11,10 +11,11 @@ interface QuizProps {
     answers: string[];
     correctAnswer: string;
   }[];
+  category: string,
   userId: string | undefined;
 }
 
-const Quiz = ({ questions, userId }: QuizProps) => {
+const Quiz = ({ questions, userId, category }: QuizProps) => {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [checked, setChecked] = useState(false);
@@ -94,6 +95,7 @@ const Quiz = ({ questions, userId }: QuizProps) => {
           quizScore: results.score,
           correctAnswers: results.correctAnswers,
           wrongAnswers: results.wrongAnswers,
+          category
         }),
       })
         .then((response) => {
@@ -121,7 +123,7 @@ const Quiz = ({ questions, userId }: QuizProps) => {
   const nextQuestion = () => {
     setSelectedAnswerIndex(null);
 
-    console.log('Prev Results', results)
+    // console.log('Prev Results', results)
 
     const newResults = {...results}
 
@@ -132,7 +134,7 @@ const Quiz = ({ questions, userId }: QuizProps) => {
       newResults.wrongAnswers = newResults.wrongAnswers + 1
     }
 
-    console.log('New Results', newResults)
+    // console.log('New Results', newResults)
     setResults(newResults);
 
     // setResults((prev) =>

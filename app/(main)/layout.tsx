@@ -17,7 +17,7 @@ const MainLayout = async ({ children } : { children: ReactNode }) => {
     <LayoutProvider>
       <Navbar />
       {children}
-      <Footer/>
+      {/* <Footer/> */}
     </LayoutProvider>
   )
 }

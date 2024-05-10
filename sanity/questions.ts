@@ -27,7 +27,7 @@ export default {
     },
     {
       title: 'Category',
-      name: 'cateogry',
+      name: 'category',
       type: 'reference',
       to: [{type: 'categories'}]
     }

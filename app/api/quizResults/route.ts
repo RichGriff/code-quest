@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req:NextRequest) {
   const body = await req.json()
-  const {userId, quizScore, correctAnswers, wrongAnswers} = body
+  const {userId, quizScore, correctAnswers, wrongAnswers, category} = body
 
   try{
     // Existing User With Results
@@ -12,6 +12,19 @@ export async function POST(req:NextRequest) {
       where: { id: userId },
       include: { quizResults: true },
     });
+
+    await prisma.user.update({
+      where: {id: userId},
+      data: {
+        categoriesCompleted: {
+          create: {
+            name: category.category,
+            categoryId: category._id,
+            completedOn: new Date()
+          },
+        },
+      }
+    })
 
     if (existingUser && existingUser.quizResults && existingUser.quizResults.length > 0) {
       console.log('Update Existing Users Results')
