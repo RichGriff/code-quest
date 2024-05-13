@@ -208,67 +208,71 @@ const Quiz = ({ questions, userId, category }: QuizProps) => {
               </div> */}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col justify-start items-start gap-4">
               <div>
                 <h3 className="mb-2 text-2xl font-bold pr-6">
                   {question}
                 </h3>
-                <ul className="mt-6">
-                  {answers.map(
-                    (answer: string, idx: number) => (
-                      <li
-                        key={idx}
-                        onClick={() =>
-                          onAnswerSelected(answer, idx)
-                        }
-                        className={`cursor-pointer mb-5 py-3 rounded-md hover:bg-indigo-500 hover:text-white px-3
-                        ${
-                          selectedAnswerIndex === idx &&
-                          "bg-indigo-600 text-white"
-                        }
-                        `}
-                      >
-                        <span>{answer}</span>
-                      </li>
-                    )
-                  )}
-                </ul>
               </div>
-              {code && (
-                <div>
-                  <div className="h-full rounded-md">
-                    <pre className="language-js h-full rounded-md">
-                      <code className="language-js">
-                        {code}
-                      </code>
-                    </pre>
-                  </div>
-                </div>
-              )}
-              {description && (
-                <div>
-                  <div className="h-full rounded-md bg-slate-50 py-4 px-6">
-                    <p>
-                      {description}
-                    </p>  
-                  </div>
-                </div>
-              )}
-              {image && (
-                <div>
-                  <div className="h-full rounded-md bg-slate-50">
-                    <div className="relative w-full h-full">
-                    <Image
-                      src={urlFor(image).url()}
-                      alt={'Image'}
-                      fill
-                      className="object-cover rounded-md"
-                    />
+              <div className="w-full flex flex-col md:flex-row-reverse justify-start items-start gap-2">
+                {code && (
+                  <div className="w-full">
+                    <div className="h-full rounded-md">
+                      <pre className="language-js md:min-h-[350px] rounded-md">
+                        <code className="language-js">
+                          {code}
+                        </code>
+                      </pre>
                     </div>
-                    {/* <img src={urlFor(image).width(200).url()} /> */}
                   </div>
+                )}
+                {description && (
+                  <div className="w-full">
+                    <div className="h-full rounded-md bg-slate-50 py-4 px-6">
+                      <p>
+                        {description}
+                      </p>  
+                    </div>
+                  </div>
+                )}
+                {image && (
+                  <div className="w-full h-[350px] md-h-full">
+                    <div className="h-full rounded-md bg-slate-50">
+                      <div className="relative w-full h-full">
+                      <Image
+                        src={urlFor(image).url()}
+                        alt={'Image'}
+                        fill
+                        className="object-cover rounded-md"
+                      />
+                      </div>
+                      {/* <img src={urlFor(image).width(200).url()} /> */}
+                    </div>
+                  </div>
+                )}
+                <div className="w-full">
+                  <ul className="w-full">
+                    {answers.map(
+                      (answer: string, idx: number) => (
+                        <li
+                          key={idx}
+                          onClick={() =>
+                            onAnswerSelected(answer, idx)
+                          }
+                          className={`cursor-pointer mb-5 py-3 rounded-md hover:bg-indigo-500 hover:text-white px-3
+                          ${
+                            selectedAnswerIndex === idx &&
+                            "bg-indigo-600 text-white"
+                          }
+                          `}
+                        >
+                          <span>{answer}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
                 </div>
-              )}
+              </div>
             </div>
             <div className="mt-4">
               <Button
