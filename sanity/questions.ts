@@ -15,6 +15,16 @@ export default {
       type: 'text'
     },
     {
+      name: 'code',
+      title: 'Code',
+      type: 'text'
+    },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'image'
+    },
+    {
       name: 'answers',
       title: "Answers",
       type: 'array',

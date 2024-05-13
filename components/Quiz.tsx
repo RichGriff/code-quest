@@ -3,16 +3,28 @@
 import { useState, useEffect } from "react";
 import StatCard from "./StatCard";
 import { Button } from "./ui/button";
-import { RefreshCcw } from "lucide-react";
+import { BarChart, CloudFog, Crown, RefreshCcw } from "lucide-react";
+
+import Prism from 'prismjs'
+import "prismjs/themes/prism-okaidia.css"
+import "prismjs/components/prism-typescript"
+import "prismjs/components/prism-javascript"
+import Link from "next/link";
+import { client } from "@/sanity/lib/client";
+import imageUrlBuilder from '@sanity/image-url'
+import Image from "next/image";
 
 interface QuizProps {
   questions: {
-    question: string;
-    answers: string[];
-    correctAnswer: string;
+    question: string
+    description: string
+    code: string
+    image: any
+    answers: string[]
+    correctAnswer: string
   }[];
-  category: string,
-  userId: string | undefined;
+  category: string
+  userId: string | undefined
 }
 
 const Quiz = ({ questions, userId, category }: QuizProps) => {
@@ -29,7 +41,15 @@ const Quiz = ({ questions, userId, category }: QuizProps) => {
   const [timeRemaining, setTimeRemaining] = useState(25);
   const [timerRunning, setTimerRunning] = useState(false);
 
-  const { question, answers, correctAnswer } = questions[activeQuestion];
+  const { question, description, code, image, answers, correctAnswer } = questions[activeQuestion];
+
+  // console.log(image)
+  const builder = imageUrlBuilder(client)
+  function urlFor(source: any) {
+    return builder.image(source)
+  }
+  // const test = urlFor(image).width(200).url()
+  // console.log(test)
 
   // useEffect(() => {
   //   let timer: NodeJS.Timeout;
@@ -166,6 +186,10 @@ const Quiz = ({ questions, userId, category }: QuizProps) => {
     }
   },[results, showResults])
 
+  useEffect(() => {
+    Prism.highlightAll()
+  },[activeQuestion])
+
   return (
     <div className="min-h-[500px]">
       <div className="max-w-[1500px] mx-auto w-[90%] flex justify-center py-10 flex-col">
@@ -184,30 +208,69 @@ const Quiz = ({ questions, userId, category }: QuizProps) => {
               </div> */}
             </div>
 
-            <div>
-              <h3 className="mb-5 text-2xl font-bold">
-                {question}
-              </h3>
-              <ul>
-                {answers.map(
-                  (answer: string, idx: number) => (
-                    <li
-                      key={idx}
-                      onClick={() =>
-                        onAnswerSelected(answer, idx)
-                      }
-                      className={`cursor-pointer mb-5 py-3 rounded-md hover:bg-indigo-500 hover:text-white px-3
-                      ${
-                        selectedAnswerIndex === idx &&
-                        "bg-indigo-600 text-white"
-                      }
-                      `}
-                    >
-                      <span>{answer}</span>
-                    </li>
-                  )
-                )}
-              </ul>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="mb-2 text-2xl font-bold pr-6">
+                  {question}
+                </h3>
+                <ul className="mt-6">
+                  {answers.map(
+                    (answer: string, idx: number) => (
+                      <li
+                        key={idx}
+                        onClick={() =>
+                          onAnswerSelected(answer, idx)
+                        }
+                        className={`cursor-pointer mb-5 py-3 rounded-md hover:bg-indigo-500 hover:text-white px-3
+                        ${
+                          selectedAnswerIndex === idx &&
+                          "bg-indigo-600 text-white"
+                        }
+                        `}
+                      >
+                        <span>{answer}</span>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+              {code && (
+                <div>
+                  <div className="h-full rounded-md">
+                    <pre className="language-js h-full rounded-md">
+                      <code className="language-js">
+                        {code}
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+              )}
+              {description && (
+                <div>
+                  <div className="h-full rounded-md bg-slate-50 py-4 px-6">
+                    <p>
+                      {description}
+                    </p>  
+                  </div>
+                </div>
+              )}
+              {image && (
+                <div>
+                  <div className="h-full rounded-md bg-slate-50">
+                    <div className="relative w-full h-full">
+                    <Image
+                      src={urlFor(image).url()}
+                      alt={'Image'}
+                      fill
+                      className="object-cover rounded-md"
+                    />
+                    </div>
+                    {/* <img src={urlFor(image).width(200).url()} /> */}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-4">
               <Button
                 onClick={nextQuestion}
                 disabled={!checked}
@@ -247,14 +310,24 @@ const Quiz = ({ questions, userId, category }: QuizProps) => {
                 value={results.wrongAnswers}
               />
             </div>
-            <Button
+            {/* <Button
             variant={"ghost"}
               onClick={() => window.location.reload()}
               className="mt-10 font-bold uppercase"
             >
               <RefreshCcw className="w-4 h-4 mr-2"/>
               Restart Quiz
-            </Button>
+            </Button> */}
+            <div className="flex justify-center items-center mt-16 gap-2">
+              <Link href={'/leaderboard'} className="py-2 px-4 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-900 flex justify-center items-center">
+                <Crown className="w-4 h-4 mr-2"/>
+                Leaderboard
+              </Link>
+              <Link href={'/stats'} className="py-2 px-4 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-900 flex justify-center items-center">
+                <BarChart className="w-4 h-4 mr-2"/>
+                My Results
+              </Link>
+            </div>
           </div>
         )}
       </div>

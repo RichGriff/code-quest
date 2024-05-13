@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { client } from "@/sanity/lib/client";
+import imageUrlBuilder from '@sanity/image-url'
 
 export async function getCategory() {
   // Get today's date in ISO 8601 format
@@ -27,6 +28,9 @@ export async function getCategory() {
 export async function getQuestions(categoryId: string) {
   const query = `*[_type == "questions" && category._ref == $categoryId]{
     question,
+    description,
+    code,
+    image,
     answers,
     correctAnswer
   }`;
@@ -45,10 +49,7 @@ export async function checkCategoryCompletion(userId: any, categoryId: string) {
     const user = await prisma.user.findFirst({
       where: { clerkUserId: userId },
     })
-
-    console.log('Found User', user)
-
-  
+    
     const completedCategory = await prisma.categoryCompleted.findFirst({
       where: {
         categoryId: categoryId,

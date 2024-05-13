@@ -1,4 +1,3 @@
-'use client'
 
 /* eslint-disable react/no-unescaped-entities */
 import { checkCategoryCompletion, getCategory } from '@/actions/fetchQuestions'
@@ -7,25 +6,28 @@ import React, { useEffect, useState } from 'react'
 import Notification from './Notification'
 import CustomLinkButton from './ui/custom-button'
 import { useUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 
-const Hero = () => {
-  const [category, setCategory] = useState(null)
-  const [completedCategory, setCompletedCategory] = useState(false)
-  // const { _id, category } = await getCategory()
-  const { user } = useUser()
-  console.log('Current User Id:', user?.id)
+const Hero = async () => {
+  // const [category, setCategory] = useState(null)
+  // const [completedCategory, setCompletedCategory] = useState(false)
+  // const { user } = useUser()
+  let completedCategory = false
+  const user = await currentUser()
 
-  // const completedCategory = user ? await checkCategoryCompletion(user?.id, _id) : false
+  const { category } = await getCategory()
+  if(category) {
+    completedCategory = user ? await checkCategoryCompletion(user?.id, category._id) : false
+  }
 
-  useEffect(() => {
-    getCategory().then(categoryResult => {
-      console.log(categoryResult)
-      setCategory(categoryResult.category)
-      checkCategoryCompletion(user?.id, categoryResult._id).then(completed => {
-        setCompletedCategory(completed)
-      })
-    })
-  },[])
+  // useEffect(() => {
+  //   getCategory().then(categoryResult => {
+  //     setCategory(categoryResult.category)
+  //     checkCategoryCompletion(user?.id, categoryResult._id).then(completed => {
+  //       setCompletedCategory(completed)
+  //     })
+  //   })
+  // },[user?.id])
 
   return (
     <section className="relative w-full min-h-[700px] flex items-center justify-center text-center">
